@@ -1,0 +1,70 @@
+
+/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+.row.content {height: 1000px;}
+.col-sm-9{height: 100%;
+          background-color: transparent;}
+/* Set gray background color and 100% height */
+.sidenav {background-color: transparent;
+          height: 100%;}
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) 
+{
+  .sidenav {height: auto;
+            padding: 15px;}
+  .row.content {height: auto;} 
+}
+.modal{display: none;
+       position: fixed;
+       z-index: 1;
+       left: 0;
+       right:0;
+       width:100%;
+       height:100%;
+       overflow: auto;
+       background-color: rgba(0,0,0.0.5);}
+.modal-content{position: relative;
+               bottom:30%;
+               background-color: #fefefe;
+               margin: 25%;
+               padding: 20px;
+               border: 1px solid #888;
+               width: 50%;}
+.body{height:1000px;
+      width: 900px;}
+#whole{/*background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMzBWdi1k2z_LcFXH9n5AdgGL0lA24fDdGX46fbVsqG6VaOCyz);*/}
+#welcome{position: relative;
+         top:50%;
+         left: 25%;
+         width:50%;
+         background-color: transparent;}
+#padder{padding: 18px;}
+.fullscreen-bg {position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                overflow: none;
+                z-index: -100;}
+#body,#tables{background-color: rgba(230, 229, 229, 0.469216);}
+td.details-control {/*background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXZewQCmf7wYsBisVWky9tJ3GHc7UL5XQ2kQ_v5FNj_GRxW0MF') no-repeat center center;*/
+                    cursor: pointer;}
+#backv {position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: -100;
+        -ms-transform: translateX(-50%) translateY(-50%);
+        -moz-transform: translateX(-50%) translateY(-50%);
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        background-size: cover;}
+#start{position: center;}
+#delok {display: none}
+#delcancel {display: none}
+div.dropdown,.checkbox {display:none;}
+table tr:hover td div.dropdown {display:inline-block;}
+/*table tr:hover td div.checkbox {display:inline-block;}*/
+/*table tr:hover {background-color: grey}*/

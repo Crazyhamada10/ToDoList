@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>To Do List</title>
+  <!--<meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="DATATABLES/datatables.min.css">
+  <script src="DATATABLES/datatables.min.js"></script>
+  <script type="text/javascript" src="Script.js"></script>
+  <link rel="stylesheet" type="text/css" href="Style.css">  
+  -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/dt/dt-1.10.11/datatables.min.css"/>
+  <script type="text/javascript" src="https://cdn.datatables.net/t/dt/dt-1.10.11/datatables.min.js"></script>
+  <style type="text/css">
+    .row.content {height: 1000px;}
+.col-sm-9{height: 100%;
+          background-color: transparent;}
+/* Set gray background color and 100% height */
+.sidenav {background-color: transparent;
+          height: 100%;}
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) 
+{
+  .sidenav {height: auto;
+            padding: 15px;}
+  .row.content {height: auto;} 
+}
+.modal{display: none;
+       position: fixed;
+       z-index: 1;
+       left: 0;
+       right:0;
+       width:100%;
+       height:100%;
+       overflow: auto;
+       background-color: rgba(0,0,0.0.5);}
+.modal-content{position: relative;
+               bottom:30%;
+               background-color: #fefefe;
+               margin: 25%;
+               padding: 20px;
+               border: 1px solid #888;
+               width: 50%;}
+.body{height:1000px;
+      width: 900px;}
+#whole{/*background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMzBWdi1k2z_LcFXH9n5AdgGL0lA24fDdGX46fbVsqG6VaOCyz);*/}
+#welcome{position: relative;
+         top:50%;
+         left: 25%;
+         width:50%;
+         background-color: transparent;}
+#padder{padding: 18px;}
+.fullscreen-bg {position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                overflow: none;
+                z-index: -100;}
+#body,#tables{background-color: rgba(230, 229, 229, 0.469216);}
+td.details-control {/*background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXZewQCmf7wYsBisVWky9tJ3GHc7UL5XQ2kQ_v5FNj_GRxW0MF') no-repeat center center;*/
+                    cursor: pointer;}
+#backv {position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: -100;
+        -ms-transform: translateX(-50%) translateY(-50%);
+        -moz-transform: translateX(-50%) translateY(-50%);
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        background-size: cover;}
+#start{position: center;}
+#delok {display: none}
+#delcancel {display: none}
+div.dropdown,.checkbox {display:none;}
+table tr:hover td div.dropdown {display:inline-block;}
+  </style>
+<script type="text/javascript">
+$(document).ready(function(){
+
+    function validateEmail(email) {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    }
+
+    function checkPassword(str)
+    {
+      // at least one number, one lowercase and one uppercase letter
+      // at least six characters that are letters, numbers or the underscore
+      var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}$/;
+      return re.test(str);
+    }
+
+    $('#log').click(function(){
+        $('#signin').show();
+    });
+
+    $('#cancel1').click(function(){
+        $('#signin').hide();
+    });
+
+    $('#newuser').click(function(){
+        $('#signup').show();
+    });
+
+    $('#cancel2').click(function(){
+        $('#signup').hide();
+    });
+
+    $('#saveinjason').  click(function(){
+        var email = document.getElementById("emailinfo2").value ;
+        var pass  = document.getElementById("pasinfo2").value ;
+        var nameer = document.getElementById("nameinfo2").value;
+        var flag = true ;
+        var obj = $.getJSON( "package.json", function() {})
+        obj.done(function(data) {
+            obj=data; 
+            for(var i=0 ; i < obj.length ; i++){
+              if(obj[i].email==email && obj[i].pass==pass){
+                flag = false ;
+                i = obj.length ;
+              }
+            }
+            if(!validateEmail(email) || !checkPassword(pass)){
+              alert('invalid email or password')
+            }
+            else if(!flag){
+              alert("email is token please regiter with another email");
+            }
+            else if(!nameer.replace(/\s+/g, '')){
+              alert("you entered no name");
+            }
+            else{
+              flag = true;
+          }
+        })
+    });
+
+    $('#checkjason').click(function(){
+            /// getting user's who try to log in data
+            var email = document.getElementById("emailinfo1").value ;
+            var pass  = document.getElementById("pasinfo1").value ;
+            var flag = false ;
+            var userdata ;
+            /// getting server dat file
+            var obj = $.getJSON( "package.json", function() {})        
+            obj.done(function(data) {
+            obj=data; 
+            for(var i=0 ; i < obj.length ; i++){
+              if(obj[i].email==email && obj[i].pass==pass){
+                flag = true ;
+                i = obj.length ;
+              }
+            }
+              if(!validateEmail(email) || !checkPassword(pass)){
+                alert('invalid email or password');
+              }
+              else if(!flag){
+                alert("email isn't found");
+              }
+              else{
+                flag = false;
+              }
+            })
+     });
+});
+</script>
+</head>
+  <body>
+  <div class="container-fluid" ID="home">
+    <div class="row content">
+        <!--<div class="fullscreen-bg">
+            <iframe id="backv" src="https://www.youtube.com/embed/UbvkHEDvw-o?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1&amp;loop=1&amp;playlist=Rk6_hdRtJOE&amp;enablejsapi=0&version=3" frameborder="0" volume="0" autoplay muted allowfullscreen></iframe>
+        </div>-->   
+        <nav class="navbar navbar-inverse">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" >TO DO LIST</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+              <ul class="nav navbar-nav">
+                <li class="active" ><a >Home</a></li>
+                <li><a >About</a></li>
+                <li><a >Gallery</a></li>
+                <li><a >Contact</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li  ><a id="log"><span  class="glyphicon glyphicon-log-in" ></span> Login</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li  ><a id="newuser"><span  class="glyphicon glyphicon-log-in" ></span> signup</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>    
+        <div class="row" id="welcome" >
+          <button  type="button"  id="start"  class="btn btn-danger btn-lg" align="center">GET STARTED</button>     
+        </div>  
+    </div>
+  </div>
+
+  <div id="signin" class="modal" visibility="hidden">
+    <div class="modal-content">
+      <form action="http://127.0.0.1:8081/login" method="post">
+        <label align="center" >Email</label>
+        <input type="text" class="form-control input-lg" id="emailinfo1" name="emailinfo1"></input>
+        <label align="center">PASSWORD ( at least one number, one lowercase and one uppercase letter
+        and at least six characters that are letters, numbers or the underscore)</label>
+        <input type="password" class="form-control input-lg" id="pasinfo1" name="pasinfo1" ></input><BR><BR>
+        <div id="errorsign" name ="errorsign" style="display:none;"><label align="left" style="color:red">invalid email or password</label></div><br>
+        <div id="multipleuser" style="display:none;" name="multipleuser"><label align="left" style="color:red">this email is token !</label></div><br>
+        <input type="submit" class="btn btn-primary" id="checkjason" VALUE="SIGN IN"></input>
+        <input type="button" class="btn btn-primary" id="cancel1" VALUE="CANCEL"></input>
+      </form> 
+    </div>
+  </div>
+
+  <div id="signup" name ="signup" class="modal" visibility="hidden">
+    <div class="modal-content">
+      <form action="http://127.0.0.1:8081/signup" method="post">
+        <label align="center" >NAME</label>
+        <input type="text" class="form-control input-lg" id="nameinfo2" name="nameinfo2"></input>
+        <label align="center" >Email</label>
+        <input type="text" class="form-control input-lg" id="emailinfo2" name="emailinfo2"></input>
+        <label align="center">PASSWORD ( at least one number, one lowercase and one uppercase letter
+        and at least six characters that are letters, numbers or the underscore)</label>
+        <input type="password" class="form-control input-lg" id="pasinfo2" name="pasinfo2" ></input><BR><BR>
+        <div id="errorsign" style="display:none;"><label align="left" style="color:red">invalid email or password</label></div><br>
+        <input type="submit" class="btn btn-primary" id="saveinjason" VALUE="SIGN UP"></input>
+        <input type="button" class="btn btn-primary" id="cancel2" VALUE="CANCEL"></input>
+      </form> 
+    </div>
+  </div>
+
+</body>

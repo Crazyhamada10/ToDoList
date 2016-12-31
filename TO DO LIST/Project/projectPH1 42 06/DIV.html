@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>To Do List</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="DATATABLES/datatables.min.css">
+  <script src="DATATABLES/datatables.min.js"></script>
+  <script type="text/javascript" src="Script.js"></script>
+  <link rel="stylesheet" type="text/css" href="Style.css">  
+  <!--
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/dt/dt-1.10.11/datatables.min.css"/>
+  <script type="text/javascript" src="https://cdn.datatables.net/t/dt/dt-1.10.11/datatables.min.js"></script>
+  -->
+</head>
+<body>
+  <div class="container-fluid" ID="home">
+    <div class="row content">
+        <!--<div class="fullscreen-bg">
+            <iframe id="backv" src="https://www.youtube.com/embed/UbvkHEDvw-o?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1&amp;loop=1&amp;playlist=Rk6_hdRtJOE&amp;enablejsapi=0&version=3" frameborder="0" volume="0" autoplay muted allowfullscreen></iframe>
+        </div>-->   
+        <nav class="navbar navbar-inverse">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" >TO DO LIST</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+              <ul class="nav navbar-nav">
+                <li class="active" ><a >Home</a></li>
+                <li><a >About</a></li>
+                <li><a >Gallery</a></li>
+                <li><a >Contact</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li  ><a id="log"><span  class="glyphicon glyphicon-log-in" ></span> Login</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>    
+        <div class="row" id="welcome" >
+          <button  type="button"  id="start"  class="btn btn-danger btn-lg" align="center">GET STARTED</button>     
+        </div>  
+    </div>
+  </div>
+
+  <div class="container-fluid" ID="whole">
+    <div class="row content" id="padder">
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" >TO DO LIST</a>
+          </div>
+          <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+              <li class="active"><a id="gostart">Home</a></li>
+              <li><a >About</a></li>
+              <li><a >Gallery</a></li>
+              <li><a >Contact</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li id="log2"><a ><span class="glyphicon glyphicon-log-in" ></span> Login</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+
+      <div class="col-sm-3 sidenav" id="tables">
+        <h4>TASKS</h4>
+        <button type="button" class="btn btn-primary btn-block">CHOOSE TABLE</button>
+        <button type="button" id="i1"  class="btn btn-primary btn-block">SHOWALLTASKS <span id="b1" class="badge">0</span></button>
+        <button type="button" id="i2"  class="btn btn-info btn-block">COMPLETED    <span id="b2" class="badge">0</span></button>
+        <button type="button" id="i3"  class="btn btn-info btn-block">ARCCHIEVED   <span id="b3" class="badge">0</span></button>
+        <button type="button" id="i4"  class="btn btn-info btn-block">ON PROGRESS  <span id="b4" class="badge">0</span></button>
+      </div>
+      <div class="col-sm-9" id="body">
+          <div class="row" id="alltas">
+            <BR><BR>
+            <button type="button" id="addb" class="btn btn-primary btn-block">add</button>
+            <button type="button" id="delb" class="btn btn-primary btn-block">delete</button>
+            <button type="button" id="delok" class="btn btn-primary">Ok</button>
+            <button type="button" id="delcancel" class="btn btn-primary">Cancel</button>
+            <BR><BR>
+            <table id="tall" class="table table-striped table-bordered" cellspacing="0" width="100%" >
+              <thead>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>
+              </thead>
+               <tfoot>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>
+              </tfoot>
+            </table>
+            <table id="tcomp" class="table table-striped table-bordered" cellspacing="0" width="100%" >
+              <thead>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>
+              </thead>
+               <tfoot>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>                      
+              </tfoot>
+            </table>
+            <table id="tprog" class="table table-striped table-bordered" cellspacing="0" width="100%" >
+              <thead>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>
+              </thead>
+               <tfoot>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>                      
+              </tfoot>
+            </table>
+            <table id="tarchi" class="table table-striped table-bordered" cellspacing="0" width="100%" >
+              <thead>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>                      
+              </thead>
+               <tfoot>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>                      
+              </tfoot>
+            </table>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="signin" class="modal" visibility="hidden">
+    <div class="modal-content">
+      <form>
+        <label align="center" >Email</label>
+        <input type="text" class="form-control input-lg" id="emailinfo"></input>
+        <label align="center">PASSWORD</label>
+        <input type="text" class="form-control input-lg" id="pasinfo"></input><BR><BR>
+        <input type="button" class="btn btn-primary" id="save" VALUE="SIGN"></input>
+        <input type="button" class="btn btn-primary" id="cancel" VALUE="CANCEL"></input>
+      </form> 
+    </div>
+  </div>
+
+  <div id="tabledata" class="modal" visibility="hidden">
+    <div class="modal-content">
+      <form>
+        <label align="center">name</label>
+        <input type="text" class="form-control input-lg" id="namesave"></input>
+        <div id="error" style="display:none;"><label align="left" style="color:red">YOU HAVE NOT ENTER A NAME</label></div><br>
+        <label align="center" >discription</label>
+        <input type="text" class="form-control input-lg" id="discriptionsave"></input>
+        <label align="center" >date</label>
+        <input type="date" class="form-control input-lg" id="datesave"></input>
+        <BR><BR>
+        <div id="error2" style="display:none;"><label align="left" style="color:red">THERE IS ANOTHER TASK WITH THE SAME DATA</label></div><br>
+        <input type="button" class="btn btn-primary" id="datasave" VALUE="save"></input>
+        <input type="button" class="btn btn-primary" id="datacancel" VALUE="cancel"></input>
+      </form> 
+    </div>
+  </div>
+
+  <div id="tableedit" class="modal" visibility="hidden">
+    <div class="modal-content">
+      <form>
+        <label align="center">name</label>
+        <input type="text" class="form-control input-lg" id="nameedit" autofocus></input>
+        <div id="erroredit" style="display:none;"><label align="left" style="color:red">YOU HAVE NOT ENTER A NAME</label></div><br>
+        <label align="center" >discription</label>
+        <input type="text" class="form-control input-lg" id="discriptionedit"></input>
+        <label align="center" >date</label>
+        <input type="date" class="form-control input-lg" id="dateedit"></input>
+        <BR><BR>
+        <div id="error2edit" style="display:none;"><label align="left" style="color:red">THERE IS ANOTHER TASK WITH THE SAME DATA</label></div><br>
+        <input type="button" class="btn btn-primary" id="dataedit" VALUE="save"></input>
+        <input type="button" class="btn btn-primary" id="datacanceledit" VALUE="cancel"></input>
+      </form> 
+    </div>
+  </div>
+
+<div class="dropdown" id="shit" visibility="hidden">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Dropdown
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Edit</a></li>
+    <li><a href="#">Mark as completed</a></li>
+    <li><a href="#">Set archived</a></li>
+    <li><a href="#">Delete</a></li>
+  </ul>
+</div>
+
+ <div class="checkbox" id="checkdelete">
+    <label><input type="checkbox" value=""></label>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>To Do List</title>
+  <!--
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="DATATABLES/datatables.min.css">
+  <script src="DATATABLES/datatables.min.js"></script>
+  <script type="text/javascript" src="Script.js"></script>
+  <link rel="stylesheet" type="text/css" href="Style.css">
+  -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/dt/dt-1.10.11/datatables.min.css"/>
+  <script type="text/javascript" src="https://cdn.datatables.net/t/dt/dt-1.10.11/datatables.min.js"></script>
+  <!--<script type="text/javascript" src="async.js"></script>-->
+
+<style type="text/css">
+/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+.row.content {height: 1000px;}
+.col-sm-9{height: 100%;
+          background-color: transparent;}
+/* Set gray background color and 100% height */
+.sidenav {background-color: transparent;
+          height: 100%;}
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) 
+{
+  .sidenav {height: auto;
+            padding: 15px;}
+  .row.content {height: auto;} 
+}
+.modal{display: none;
+       position: fixed;
+       z-index: 1;
+       left: 0;
+       right:0;
+       width:100%;
+       height:100%;
+       overflow: auto;
+       background-color: rgba(0,0,0.0.5);}
+.modal-content{position: relative;
+               bottom:30%;
+               background-color: #fefefe;
+               margin: 25%;
+               padding: 20px;
+               border: 1px solid #888;
+               width: 50%;}
+.body{height:1000px;
+      width: 900px;}
+#whole{/*background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMzBWdi1k2z_LcFXH9n5AdgGL0lA24fDdGX46fbVsqG6VaOCyz);*/}
+#welcome{position: relative;
+         top:50%;
+         left: 25%;
+         width:50%;
+         background-color: transparent;}
+#padder{padding: 18px;}
+.fullscreen-bg {position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                overflow: none;
+                z-index: -100;}
+#body,#tables{background-color: rgba(230, 229, 229, 0.469216);}
+td.details-control {/*background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXZewQCmf7wYsBisVWky9tJ3GHc7UL5XQ2kQ_v5FNj_GRxW0MF') no-repeat center center;*/
+                    cursor: pointer;}
+#backv {position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: -100;
+        -ms-transform: translateX(-50%) translateY(-50%);
+        -moz-transform: translateX(-50%) translateY(-50%);
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        background-size: cover;}
+#start{position: center;}
+#delok {display: none}
+#delcancel {display: none}
+div.dropdown,.checkbox {display:none;}
+table tr:hover td div.dropdown {display:inline-block;}
+/*table tr:hover td div.checkboxloadScript(); {display:inline-block;}*/
+/*table tr:hover {background-color: grey}*/
+</style>
+
+<script type="text/javascript">
+
+$(document).ready(function()
+{
+    var email ;
+    var pass ;
+    var flag = 1;
+    var counter = 0;
+    var tcomp = $('#tcomp').DataTable() ;
+    var tall = $('#tall').DataTable() ;
+    var tarchi = $('#tarchi').DataTable() ;  
+    var tprog = $('#tprog').DataTable() ; 
+    var everyThing = [];
+
+    ////NEW JAVA SCRIPT
+    $.get('/acquiredata', {}, function(userdata){
+
+        data = userdata.tables ;
+        if(data.tall.length != 0){
+          for(var i=0 ; i<data.tall.length ; i++){
+              var arr = [data.tall[i].checkbox,data.tall[i].name,data.tall[i].Description,data.tall[i].date,data.tall[i].dropdown];
+              tall.row.add(arr).draw();
+              everyThing.push(arr);
+
+          }
+        }
+      
+
+        if(data.tarchi.length != 0){
+          for(var i=0 ; i<data.tarchi.length ; i++){
+            var arr = [data.tarchi[i].checkbox,data.tarchi[i].name,data.tarchi[i].Description,data.tarchi[i].date,data.tarchi[i].dropdown];
+            tarchi.row.add(arr).draw(); 
+          }
+        }
+      
+        if(data.tprog.length != 0){
+          for(var i=0 ; i<data.tprog.length ; i++){
+            var arr = [data.tprog[i].checkbox,data.tprog[i].name,data.tprog[i].Description,data.tprog[i].date,data.tprog[i].dropdown];
+            tprog.row.add(arr).draw();
+          }
+        }
+            
+
+        if(data.tcomp.length != 0){
+          for(var i=0 ; i<data.tcomp.length ; i++){
+            var arr = [data.tcomp[i].checkbox,data.tcomp[i].name,data.tcomp[i].Description,data.tcomp[i].date,data.tcomp[i].dropdown];
+            tcomp.row.add(arr).draw(); 
+          }
+        }
+
+        $("#b1").html(countrows(tall));
+        $("#b2").html(countrows(tcomp));
+        $("#b3").html(countrows(tarchi));
+        $("#b4").html(countrows(tprog));
+
+        $( "#username" ).text( " "+userdata.name );             
+    });   
+
+    function saveInJson(){ 
+      var obj = {tall:[],tcomp:[],tarchi:[],tprog:[]};
+      var length_arr = countrows(tall);
+      for (var th=0 ; th<length_arr ; th++){
+        obj.tall.push({
+            checkbox: String(tall.row(th).data()[0]) ,
+            name: String(tall.row(th).data()[1]), 
+            Description: String(tall.row(th).data()[2]) ,
+            date: String(tall.row(th).data()[3]) , 
+            dropdown: String(tall.row(th).data()[4])
+        });
+      }
+
+      length_arr = countrows(tcomp);
+      for (var th=0 ; th<length_arr ; th++){
+        obj.tcomp.push({
+            checkbox: String(tcomp.row(th).data()[0]),
+            name: String(tcomp.row(th).data()[1]), 
+            Description: String(tcomp.row(th).data()[2]) ,
+            date: String(tcomp.row(th).data()[3]) , 
+            dropdown: String(tcomp.row(th).data()[4])
+         });
+      }
+
+      length_arr = countrows(tarchi);
+      for (var th=0 ; th<length_arr ; th++){
+        obj.tarchi.push({
+            checkbox: String(tarchi.row(th).data()[0]),
+            name: String(tarchi.row(th).data()[1]), 
+            Description: String(tarchi.row(th).data()[2]) ,
+            date: String(tarchi.row(th).data()[3]) , 
+            dropdown: String(tarchi.row(th).data()[4])
+        });
+      }
+
+      length_arr = countrows(tprog);
+      for (var th=0 ; th<length_arr ; th++){
+        obj.tprog.push({
+            checkbox: String(tprog.row(th).data()[0]),
+            name: String(tprog.row(th).data()[1]), 
+            Description: String(tprog.row(th).data()[2]) ,
+            date: String(tprog.row(th).data()[3]) , 
+            dropdown: String(tprog.row(th).data()[4])
+        });
+      }
+
+      $.ajax({
+        type: 'POST' ,
+        url: '/save',
+        data: obj ,
+        error: function (xhr, status, error) {
+          console.log('Error: ' + error.message);
+        }
+      });
+    }
+
+    function sleep(ms) {
+    var t = Date.now() + ms;
+    while(Date.now() < t) ;
+	}
+
+	function grabdata()
+	{
+		var userdata;
+		 $.ajax({
+			url: "/acquiredata",
+      	    async: 0,
+        	success: function(data) {
+        		userdata = data;
+        	}
+		});
+		return userdata.tables;
+	}
+
+    function checktrue(row){
+        var flager = false; 
+		var data = grabdata();
+        if(flag==1)
+        {
+            if(data.tall.length != 0 && !flager){
+             for(var i=0 ; i<data.tall.length ; i++){
+              var arr = [data.tall[i].checkbox,data.tall[i].name,data.tall[i].Description,data.tall[i].date,data.tall[i].dropdown];
+              if (String(arr) == String(row))
+              {
+                console.log("found");
+                flager = true;
+                break;
+              }
+          }
+        }
+        }
+        else if(flag==2)
+        {
+            if(data.tcomp.length != 0 && !flager){
+            for(var i=0 ; i<data.tcomp.length ; i++){
+              var arr = [data.tcomp[i].checkbox,data.tcomp[i].name,data.tcomp[i].Description,data.tcomp[i].date,data.tcomp[i].dropdown];
+              if (String(arr) == String(row))
+              {
+                  console.log("found");
+                  flager = true;
+                  break;
+              } 
+            }
+          } 
+        }
+        else if(flag==3)
+        {
+          if(data.tarchi.length != 0 && !flager){
+            for(var i=0 ; i<data.tarchi.length ; i++){
+              var arr = [data.tarchi[i].checkbox,data.tarchi[i].name,data.tarchi[i].Description,data.tarchi[i].date,data.tarchi[i].dropdown];
+              if (String(arr) == String(row))
+              {
+                  console.log("found");
+                  flager = true;
+                  break;
+              }
+            }
+          }
+        }
+        else if(flag==4)
+        {
+            if(data.tprog.length != 0 && !flager){
+            for(var i=0 ; i<data.tprog.length ; i++){
+              var arr = [data.tprog[i].checkbox,data.tprog[i].name,data.tprog[i].Description,data.tprog[i].date,data.tprog[i].dropdown];
+              if (String(arr) == String(row))
+              {
+                  console.log("found");
+                  flager = true;
+                  break;
+              }
+            }
+          }
+        }
+       if (!flager)
+          console.log("not found");
+      	return flager;
+    }
+
+    //END OF NEW JAVASCRIPT
+
+
+    $("#tarchi_wrapper").hide();
+    $("#tcomp_wrapper").hide();
+    $("#tprog_wrapper").hide();
+
+    $('#addb').click(function()
+    {
+        $('#tabledata').show();
+        $('#namesave').focus();
+    });
+
+    $('#delb').click(function()
+    {
+        $('#delok').show();
+        $('#delcancel').show();
+        $('#delb').hide();
+        $('#addb').hide();
+        $('table tr td div.checkbox').css("display","inline-block");
+    });
+
+    $('#delcancel').click(function()
+    {
+        $(":checked").attr('checked',false);  
+        $('#delok').hide();
+        $('#delcancel').hide();
+        $('#delb').show();
+        $('#addb').show();
+        $('div.checkbox').css("display","none");
+    });
+
+    $('#delok').click(function()
+    {
+      if (confirm("Are you sure to delete the checked tasks?") == true) 
+      {
+        $(":checked").each(function()
+        {
+            if (this.checked)
+            {
+            var dtable;
+                if(flag==1)
+                {
+                  dtable = tall;
+                }
+                else if(flag==2)
+                {
+                    dtable = tcomp; 
+                }
+                else if(flag==3)
+                {
+                  dtable = tarchi;
+                }
+                else if(flag==4)
+                {
+                  dtable = tprog;
+                }
+                thisRow=$(this).parents('tr');
+                var km = dtable.row(thisRow).index();
+                var rowman = dtable.row(km).data();
+                var dbtester = checktrue(String(rowman));
+ 	        	if(!dbtester) 
+            	{
+     	     		alert("There is someone opening the same email from another page, he made changes to table data so the page will reload");
+        	  		location.reload();
+          		}
+          		else{
+
+	                var check_arr = [tall, tcomp, tarchi, tprog];
+	                for (var na =0;na<4;na++)
+	                {
+	                  var length_arr = countrows(check_arr[na]);
+	                  for (var th=0;th<length_arr;th++)
+	                  {
+	                    if(String(check_arr[na].row(th).data()) == String(rowman))
+	                    {
+	                      check_arr[na].row(th).remove().draw();
+	                    }
+	                  }
+	              }
+	              $("#b1").html(countrows(tall));
+	              $("#b2").html(countrows(tcomp));
+	              $("#b3").html(countrows(tarchi));
+	              $("#b4").html(countrows(tprog));
+	              saveInJson();
+	            }  
+            }
+        });        
+      } 
+      else 
+      {
+        $(":checked").attr('checked',false);
+      }
+        $('#delok').hide();
+        $('#delcancel').hide();
+        $('#delb').show();
+        $('#addb').show();
+        $('div.checkbox').css("display","none");
+    });
+
+    $('#datacancel').click(function()
+    {
+        $('#tabledata').hide();
+        document.getElementById('namesave').value="";
+        document.getElementById('discriptionsave').value="";
+        document.getElementById('datesave').value=null;
+        $("#error").fadeOut();
+        $("#error2").fadeOut();     
+    });
+
+    $('#datasave').click(function()
+    {
+        var nam  = document.getElementById('namesave').value;
+        var des  = document.getElementById('discriptionsave').value;
+        /////////////////
+        if (nam.length > 40)
+        {
+          var stringer = nam;
+          nam = "";
+          for (var t=0; t<stringer.length; t+=40)
+          {
+            nam+=stringer.slice(t,t+39) + "<br>";
+          }
+        }
+         if (des.length > 40)
+        {
+          var stringer = des;
+          des = "";
+          for (var t=0; t<stringer.length; t+=40)
+          {
+            des+=stringer.slice(t,t+39) + "<br>";
+          }
+        }
+        /////////////////
+        var dat  = document.getElementById('datesave').value;
+        this.child = $(document.getElementById('shit')).clone();
+        this.child.attr("id", "goes");
+        this.child.attr("class", "goes dropdown");
+        this.test1 = $(this.child.children().children().children()[0]);
+        this.test1.attr("class","edit");
+        this.test2 = $(this.child.children().children().children()[1]);
+        this.test2.attr("class","mark");
+        this.test3 = $(this.child.children().children().children()[2]);
+        this.test3.attr("class","starc");
+        this.test4 = $(this.child.children().children().children()[3]);
+        this.test4.attr("class","del");
+        /////////////////////
+        this.child1 = $(document.getElementById('checkdelete')).clone();
+        this.child1.attr("id", "ncheck");
+        this.child1.attr("class", "ncheck checkbox");
+        /////////////////////
+        var checker = 0;
+        var arr = [this.child1.wrap('<div>').parent().html(),String(nam),String(des),String(dat),this.child.wrap('<div>').parent().html()];
+        for (var xv=0;xv<everyThing.length;xv++)
+        {
+          if (String(everyThing[xv]) == String(arr))
+          {
+            checker = 1;
+          } 
+        } 
+        if(document.getElementById('namesave').value=="" || !document.getElementById('namesave').value.replace(/\s+/g, ''))
+        {
+            $("#error").fadeIn();
+        }
+        else if (checker == 1)
+        {
+          $("#error2").fadeIn();
+        }
+        else
+        {
+        	var dbtester = checktrue(String(arr));
+ 	        if(dbtester) 
+            {
+     	     	alert("There is someone opening the same email from another page, he made changes to table data so the page will reload");
+        	  	location.reload();
+          	}
+          	else{
+	            everyThing.push(arr);
+	            tall.row.add(arr).draw();
+	            tprog.row.add(arr).draw();
+	            //document.getElementById("b1").innerHTML = document.getElementById('tall').rows.length-2;
+	            $("#b1").html(countrows(tall));
+	            $("#b4").html(countrows(tprog));
+	            $('#tabledata').hide();
+	            document.getElementById('namesave').value="";
+	            document.getElementById('discriptionsave').value="";
+	            document.getElementById('datesave').value=null;
+	            $("#error").fadeOut();
+	            $("#error2").fadeOut();
+	            saveInJson();
+        	}
+        }
+    });
+        
+    
+    $('tbody').on( 'click', 'tr', function () 
+    {
+        $('td').off('click', '.edit').on('click', '.edit',function()
+        {
+            var dtable;
+              if(flag==1)
+            {
+              dtable = tall;
+            }
+            else if(flag==2)
+            {
+                dtable = tcomp; 
+            }
+            else if(flag==3)
+            {
+              dtable = tarchi;
+            }
+            else if(flag==4)
+            {
+              dtable = tprog;
+            }
+            thisRow = $(this).parents('tr');
+            var km = dtable.row(thisRow).index();
+            var rowman = dtable.row(km).data();
+            var dbtester = checktrue(String(rowman));
+ 	        if(!dbtester) 
+            {
+     	     	alert("There is someone opening the same email from another page, he made changes to table data so the page will reload");
+        	  	location.reload();
+          	}
+          	else
+          	{
+	            $('#nameedit').val(rowman[1]);
+	            $('#discriptionedit').val(rowman[2]);
+	            $('#dateedit').val(rowman[3]);
+	            $('#tableedit').show();
+            } 
+        });
+
+        $('td').off('click', '.mark').on('click', '.mark',function()
+        {
+          var checker =0;
+          var dtable;
+              if(flag==1)
+            {
+              dtable = tall;
+            }
+            else if(flag==2)
+            {
+                dtable = tcomp;
+            }
+            else if(flag==3)
+            {
+              dtable = tarchi;
+            }
+            else if(flag==4)
+            {
+              dtable = tprog;
+            }
+            thisRow= $(this).parents('tr');
+            var km = dtable.row(thisRow).index();
+            var rowman = dtable.row(km).data();
+            var dbtester = checktrue(String(rowman));
+ 	        if(!dbtester) 
+            {
+     	     	alert("There is someone opening the same email from another page, he made changes to table data so the page will reload");
+        	  	location.reload();
+          	}
+          	else{
+
+
+	            var testing = 0;
+	            var length_arr = countrows(tcomp);
+	            for (var th=0;th<length_arr;th++)
+	            { 
+	              if(String(tcomp.row(th).data()) == String(rowman))
+	              {
+	                testing = 1;
+	              }
+	            }
+	            if (testing == 0)
+		            {
+		              tcomp.row.add(rowman).draw();
+		              length_arr = countrows(tall);
+		              var thog = 0;
+		              for (var th=0;th<length_arr;th++)
+		              { 
+		                if(String(tall.row(th).data()) == String(rowman))
+		                {
+		                  thog = 1;
+		                  var newstrike = rowman;
+		                  newstrike[1] = newstrike[1].strike();
+		                  tall.row(th).data(newstrike);
+		                }
+		              }
+		              if (thog == 0)
+		              {
+		                  var newstrike = rowman;
+		                  newstrike[1] = newstrike[1].strike();
+		                  tall.row.add(newstrike).draw();
+		              }         
+		          length_arr = countrows(tprog);
+		              for (var th=0;th<length_arr;th++)
+		              { 
+		                if(String(tprog.row(th).data()) == String(rowman))
+		                {
+		                  tprog.row(th).remove().draw();
+		                }
+		              }
+		          length_arr = countrows(tarchi);
+		              for (var th=0;th<length_arr;th++)
+		              { 
+		                if(String(tarchi.row(th).data()) == String(rowman))
+		                {
+		                  tarchi.row(th).remove().draw();
+		                }
+		              }
+		              $("#b1").html(countrows(tcomp));
+		              $("#b2").html(countrows(tcomp));
+		              $("#b3").html(countrows(tarchi));
+		              $("#b4").html(countrows(tprog));
+		              saveInJson();
+		          }
+		          else
+		          {
+		            alert('This task is already marked as completed');
+		          }
+      		}
+        });
+
+        $('td').off('click', '.starc').on('click', '.starc',function()
+        {
+          var dtable;
+              if(flag==1)
+            {
+              dtable = tall;
+            }
+            else if(flag==2)
+            {
+                dtable = tcomp;
+            }
+            else if(flag==3)
+            {
+              dtable = tarchi;
+            }
+            else if(flag==4)
+            {
+              dtable = tprog;
+            }
+            
+            thisRow=$(this).parents('tr');
+            var km = dtable.row(thisRow).index();
+            var rowman = dtable.row(km).data();
+            var dbtester = checktrue(String(rowman));
+ 	        if(!dbtester) 
+            {
+     	     	alert("There is someone opening the same email from another page, he made changes to table data so the page will reload");
+        	  	location.reload();
+          	}
+          	else{ 
+	            var testing = 0;
+	            var testing2 = 0;
+	            var length_arr = countrows(tcomp);
+	            for (var th=0;th<length_arr;th++)
+	            { 
+	              if(String(tcomp.row(th).data()) == String(rowman))
+	              {
+	                testing = 1;
+	              }
+	            }
+
+	            length_arr = countrows(tarchi);
+	            for (var th=0;th<length_arr;th++)
+	            { 
+	              if(String(tarchi.row(th).data()) == String(rowman))
+	              {
+	                testing2 = 1;
+	              }
+	            }
+	            if (testing == 0 && testing2 == 0)
+	            {
+	              tarchi.row.add(rowman).draw();
+	              var check_arr = [tall, tprog];
+	              for (var na =0;na<2;na++)
+	              {
+	                var length_arr = countrows(check_arr[na]);
+	                for (var th=0;th<length_arr;th++)
+	                {
+	                  if(String(check_arr[na].row(th).data()) == String(rowman))
+	                  {
+	                    check_arr[na].row(th).remove().draw();
+	                  }
+	                }
+	              }
+	              $("#b1").html(countrows(tall));
+	              $("#b3").html(countrows(tarchi));
+	              $("#b4").html(countrows(tprog));
+	              saveInJson();
+	            }
+	            else if(testing == 1)
+	            {
+	              alert("You can't archieve a completed task");
+	            }
+	            else
+	            {
+	              alert('This task is already set archieved');
+	            }
+	        }
+        });
+
+        $('td').off('click', '.del').on('click', '.del',function()
+        {
+          var dtable;
+          if(flag==1)
+          {
+            dtable = tall;
+          }
+          else if(flag==2)
+          {
+              dtable = tcomp; 
+          }
+          else if(flag==3)
+          {
+            dtable = tarchi;
+          }
+          else if(flag==4)
+          {
+            dtable = tprog;
+          }
+          thisRow = $(this).parents('tr');
+          var km = dtable.row(thisRow).index();
+          var rowman = dtable.row(km).data();
+          var dbtester = checktrue(String(rowman));
+          if(!dbtester) 
+          {
+          	alert("There is someone opening the same email from another page, he made changes to table data so the page will reload");
+          	location.reload();
+          }
+          else(confirm("Are you sure to delete this task?") == true) 
+          {
+              var check_arr = [tall, tcomp, tarchi, tprog];
+              for (var na =0;na<4;na++)
+              {
+                var length_arr = countrows(check_arr[na]);
+                for (var th=0;th<length_arr;th++)
+                {
+                  if(String(check_arr[na].row(th).data()) == String(rowman))
+                  {
+                    check_arr[na].row(th).remove().draw();
+                  }
+                }
+              }
+              $("#b1").html(countrows(tall));
+              $("#b2").html(countrows(tcomp));
+              $("#b3").html(countrows(tarchi));
+              $("#b4").html(countrows(tprog));
+              saveInJson();
+          }    
+        });
+    });
+
+    function countrows(input)
+    {
+      switch(input)
+      {
+        case tall:
+              if ($("#tall tbody  tr").length == 1 && tall.row(0).data() == undefined)
+            {
+              return 0;
+            }
+          return $("#tall tbody  tr").length;
+          break;
+        case tcomp:
+          if ($("#tcomp tbody  tr").length == 1 && tcomp.row(0).data() == undefined)
+            {
+              return 0;
+            }
+          return $("#tcomp tbody  tr").length;
+          break;
+        case tarchi:
+          if ($("#tarchi tbody  tr").length == 1 && tarchi.row(0).data() == undefined)
+            {
+              return 0;
+            }
+          return $("#tarchi tbody  tr").length;
+          break;
+        case tprog:
+          if ($("#tprog tbody  tr").length == 1 && tprog.row(0).data() == undefined)
+            {
+              return 0;
+            }
+          return $("#tprog tbody  tr").length;
+          break;
+      }
+    }
+
+    $('#dataedit').click(function()
+    {
+        var dtable;
+        var checker = 0;
+        if(flag==1)
+        {
+          dtable = tall;
+        }
+        else if(flag==2)
+        {
+            dtable = tcomp;
+        }
+        else if(flag==3)
+        {
+          dtable = tarchi;
+        }
+        else if(flag==4)
+        {
+          dtable = tprog;
+        }
+        var km = dtable.row(thisRow).index();
+        var rowman = [5];
+        rowman[0] = dtable.row(km).data()[0];
+        rowman[1] = $('#nameedit').val();
+        rowman[2] = $('#discriptionedit').val();
+        rowman[3] = $('#dateedit').val();
+        rowman[4] = dtable.row(km).data()[4];
+        /////////////////
+        if (rowman[1].length > 40)
+        {
+          var stringer = rowman[1];
+          rowman[1] = "";
+          for (var t=0; t<stringer.length; t+=40)
+          {
+            rowman[1]+=stringer.slice(t,t+39) + "<br>";
+          }
+        }
+        if (rowman[2].length > 40)
+        {
+          var stringer = rowman[2];
+          rowman[2] = "";
+          for (var t=0; t<stringer.length; t+=40)
+          {
+            rowman[2]+=stringer.slice(t,t+39) + "<br>";
+          }
+        }
+        /////////////////
+        var check_arr = [tall, tcomp, tarchi, tprog];
+        for (var na =0;na<4;na++)
+        {
+          var length_arr = countrows(check_arr[na]);
+          for (var th=0;th<length_arr;th++)
+          {
+            if(String(check_arr[na].row(th).data()) == String(rowman))
+              checker = 1;
+          }
+        }
+        if (rowman[1] == "" || !rowman[1].replace(/\s+/g, ''))
+        {
+        $("#erroredit").fadeIn();
+        }
+        else if (checker == 1)
+        {
+        $("#error2edit").fadeIn();
+        }
+        else
+        {
+          var temp = dtable.row(km).data();
+          for (var nh=0;nh<4;nh++)
+          {
+            var length_arr = countrows(check_arr[nh]);
+            for (var th=0;th<length_arr;th++)
+            { 
+              if(String(check_arr[nh].row(th).data()) == String(temp))
+              {
+                check_arr[nh].row(th).data(rowman);
+              }
+            }
+          }
+          $('#tableedit').hide();
+          $('#nameedit').val("");
+          $('#discriptionedit').val("");
+          $('#dateedit').val(null);
+          $("#erroredit").fadeOut();
+          $("#error2edit").fadeOut();
+          saveInJson();
+        }
+    });
+
+    $('#datacanceledit').click(function()
+    {
+        $('#tableedit').hide();
+        $('#nameedit').val("");
+        $('#discriptionedit').val("");
+        $('#dateedit').val(null);
+        $("#error2edit").fadeOut();
+        $("#erroredit").fadeOut();
+    });
+
+
+    //btn btn-info btn-block
+    //btn btn-primary btn-block
+    $('#i1').click(function()
+    {
+      flag=1; 
+      $('#i1').attr('class', 'btn btn-primary btn-block');
+      $('#i2').attr('class', 'btn btn-info btn-block');
+      $('#i3').attr('class', 'btn btn-info btn-block');
+      $('#i4').attr('class', 'btn btn-info btn-block');
+      $("#tall_wrapper").show();
+      $("#tcomp_wrapper").hide();
+      $("#tarchi_wrapper").hide();
+      $("#tprog_wrapper").hide(); 
+    });
+
+    $('#i2').click(function()
+    {
+      flag=2;
+      $('#i2').attr('class', 'btn btn-primary btn-block');
+      $('#i1').attr('class', 'btn btn-info btn-block');
+        $('#i3').attr('class', 'btn btn-info btn-block');
+      $('#i4').attr('class', 'btn btn-info btn-block');  
+      $("#tcomp_wrapper").show();
+      $("#tall_wrapper").hide();
+      $("#tarchi_wrapper").hide();
+      $("#tprog_wrapper").hide();
+    });
+
+    $('#i3').click(function()
+    {
+      flag=3;  
+        $('#i3').attr('class', 'btn btn-primary btn-block');
+        $('#i2').attr('class', 'btn btn-info btn-block');
+          $('#i1').attr('class', 'btn btn-info btn-block');
+        $('#i4').attr('class', 'btn btn-info btn-block');
+      $("#tarchi_wrapper").show();
+      $("#tall_wrapper").hide();
+      $("#tcomp_wrapper").hide();
+      $("#tprog_wrapper").hide();    
+    });
+
+    $('#i4').click(function()
+    {
+        flag=4;
+       $('#i4').attr('class', 'btn btn-primary btn-block');
+       $('#i2').attr('class', 'btn btn-info btn-block');
+       $('#i3').attr('class', 'btn btn-info btn-block');
+       $('#i1').attr('class', 'btn btn-info btn-block');  
+        $("#tprog_wrapper").show();
+        $("#tall_wrapper").hide();
+        $("#tcomp_wrapper").hide();
+        $("#tarchi_wrapper").hide();
+    });   
+});
+</script>
+
+</head>
+<body>
+  <div class="container-fluid" ID="whole">
+    <div class="row content" id="padder">
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" >TO DO LIST</a>
+          </div>
+          <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+              <li class="active"><a id="gostart">Home</a></li>
+              <li><a >About</a></li>
+              <li><a >Gallery</a></li>
+              <li><a >Contact</a></li>
+            </ul>
+            <form action="http://127.0.0.1:8081/signout" method="post">
+            <ul class="nav navbar-nav navbar-right">
+              <li id="signout"><a ><span class="glyphicon glyphicon-log-in" ></span>  <button type="submit">signout</button></a></li>
+            </ul></form>
+            <ul class="nav navbar-nav navbar-right">
+              <li ><a ><span class="glyphicon glyphicon-log-in" id="username"></span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+
+      <div class="col-sm-3 sidenav" id="tables">
+        <h4>TASKS</h4>
+        <button type="button" class="btn btn-primary btn-block">CHOOSE TABLE</button>
+        <button type="button" id="i1"  class="btn btn-primary btn-block">SHOWALLTASKS <span id="b1" class="badge">0</span></button>
+        <button type="button" id="i2"  class="btn btn-info btn-block">COMPLETED    <span id="b2" class="badge">0</span></button>
+        <button type="button" id="i3"  class="btn btn-info btn-block">ARCCHIEVED   <span id="b3" class="badge">0</span></button>
+        <button type="button" id="i4"  class="btn btn-info btn-block">ON PROGRESS  <span id="b4" class="badge">0</span></button>
+      </div>
+      <div class="col-sm-9" id="body">
+          <div class="row" id="alltas">
+            <BR><BR>
+            <button type="button" id="addb" class="btn btn-primary btn-block">add</button>
+            <button type="button" id="delb" class="btn btn-primary btn-block">delete</button>
+            <button type="button" id="delok" class="btn btn-primary">Ok</button>
+            <button type="button" id="delcancel" class="btn btn-primary">Cancel</button>
+            <BR><BR>
+            <table id="tall" class="table table-striped table-bordered" cellspacing="0" width="100%" >
+              <thead>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>
+              </thead> 
+               <tfoot>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>
+              </tfoot>
+            </table>
+            <table id="tcomp" class="table table-striped table-bordered" cellspacing="0" width="100%" >
+              <thead>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>
+              </thead>
+               <tfoot>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>                      
+              </tfoot>
+            </table>
+            <table id="tprog" class="table table-striped table-bordered" cellspacing="0" width="100%" >
+              <thead>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>
+              </thead>
+               <tfoot>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>                      
+              </tfoot>
+            </table>
+            <table id="tarchi" class="table table-striped table-bordered" cellspacing="0" width="100%" >
+              <thead>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>                      
+              </thead>
+               <tfoot>
+                      <td></td>
+                      <td>name</td>
+                      <td>Description</td>
+                      <td>date</td>
+                      <td></td>                      
+              </tfoot>
+            </table>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+
+  <div id="tabledata" class="modal" visibility="hidden">
+    <div class="modal-content">
+      <form>
+        <label align="center">name</label>
+        <input type="text" class="form-control input-lg" id="namesave"></input>
+        <div id="error" style="display:none;"><label align="left" style="color:red">YOU HAVE NOT ENTER A NAME</label></div><br>
+        <label align="center" >discription</label>
+        <input type="text" class="form-control input-lg" id="discriptionsave"></input>
+        <label align="center" >date</label>
+        <input type="date" class="form-control input-lg" id="datesave"></input>
+        <BR><BR>
+        <div id="error2" style="display:none;"><label align="left" style="color:red">THERE IS ANOTHER TASK WITH THE SAME DATA</label></div><br>
+        <input type="button" class="btn btn-primary" id="datasave" VALUE="save"></input>
+        <input type="button" class="btn btn-primary" id="datacancel" VALUE="cancel"></input>
+      </form> 
+    </div>
+  </div>
+
+  <div id="tableedit" class="modal" visibility="hidden">
+    <div class="modal-content">
+      <form>
+        <label align="center">name</label>
+        <input type="text" class="form-control input-lg" id="nameedit" autofocus></input>
+        <div id="erroredit" style="display:none;"><label align="left" style="color:red">YOU HAVE NOT ENTER A NAME</label></div><br>
+        <label align="center" >discription</label>
+        <input type="text" class="form-control input-lg" id="discriptionedit"></input>
+        <label align="center" >date</label>
+        <input type="date" class="form-control input-lg" id="dateedit"></input>
+        <BR><BR>
+        <div id="error2edit" style="display:none;"><label align="left" style="color:red">THERE IS ANOTHER TASK WITH THE SAME DATA</label></div><br>
+        <input type="button" class="btn btn-primary" id="dataedit" VALUE="save"></input>
+        <input type="button" class="btn btn-primary" id="datacanceledit" VALUE="cancel"></input>
+      </form> 
+    </div>
+  </div>
+
+<div class="dropdown" id="shit" visibility="hidden">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Dropdown
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a >Edit</a></li>
+    <li><a >Mark as completed</a></li>
+    <li><a >Set archived</a></li>
+    <li><a >Delete</a></li>
+  </ul>
+</div>
+
+ <div class="checkbox" id="checkdelete">
+    <label><input type="checkbox" value=""></label>
+</div>
+
+<input type="text" id="dummy" name="dummy"></input>
+
+</body>
+</html>
